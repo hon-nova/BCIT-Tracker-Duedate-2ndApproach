@@ -22,13 +22,7 @@ export function Assignments({assignments, countCompleted}: AssignmentsProps) {
       </header>
 
       <div className={styles.list}>
-         {/* *export type AssignmentProps = {
-                              id:string|null,
-                              assnname:string|null,
-                              isChecked: boolean,
-                              onDelete: (id:string)=>void,
-                              onCheckedBtn: (id:string)=>void
-                           } */}
+        
     {assignments.length >0 && assignments.map((item:AssignmentProps)=>(
       <div key={item.id}>
          <Assignment

@@ -9,23 +9,12 @@ function App() {
   const [assignments, setAssignments ]= useState<AssignmentProps[]>([])
   const [countCompleted, setCountCompleted ]=useState<number>(0)
 
-   console.log(`assnname: `,assnname);
-   console.log(`duedate: `,duedate);
-   
-   
-  function handleDelete(id:string){
-      
+   function handleDelete(id:string){      
       const updateAssns = [...assignments].filter((item:AssignmentProps)=>item.id !==id)
-      setAssignments(updateAssns)
-         
-   }
-      
-//   console.log(`assignments: `,assignments);
-  function handleCheckedBtn(id:string){
-      //setAssignments with isChecked for a clicked item
-      // alert(`item clicked with id: ${id}`)
-      console.log(`item clicked: `,id);
-      
+      setAssignments(updateAssns)         
+   } 
+   function handleCheckedBtn(id:string){
+           
       setAssignments((preAssns:AssignmentProps[])=>{
          const updateAssns = preAssns.map((item:AssignmentProps)=>item.id ===id ? {...item,isChecked: !item.isChecked}: item)
 

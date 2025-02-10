@@ -11,17 +11,15 @@ type AssignmentProps = {
 }
 
 export function Assignment({id, assnname, duedate,isChecked, onDelete, onCheckedBtn}: AssignmentProps) {
-   console.log(`isChecked @Assignment: `,isChecked);
+   
+
    function formatDay(duedate:string){
       const milliseconds = new Date(duedate).getTime()
-      console.log(`typeof milliseconds: `,typeof milliseconds);
-      const now = new Date().getTime()
-      console.log('now: ',now);
       
+      const now = new Date().getTime()     
       const days = Math.ceil((milliseconds-now) / (24 * 60 * 60 * 1000));
-      console.log(`days: `,days);
-      return days
       
+      return days      
    }
    formatDay(duedate)
   return (
