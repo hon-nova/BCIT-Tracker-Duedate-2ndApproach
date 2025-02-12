@@ -5,13 +5,36 @@ import { FaCircleCheck } from "react-icons/fa6";
 
 export function Assignment({ id, assnname,duedate, isCompleted, setAssignments, setCountCompleted }: TAssignment) {  
   
-   function formatDay(duedate:string){
-      const milliseconds = new Date(duedate).getTime()
+   // function formatDay(duedate:string){
+   //    const milliseconds = new Date(duedate).getTime()
       
-      const now = new Date().getTime()     
-      const days = Math.ceil((milliseconds-now) / (24 * 60 * 60 * 1000));      
-      return days      
-   }  
+   //    const now = new Date().getTime()     
+   //    const days = Math.ceil((milliseconds-now) / (24 * 60 * 60 * 1000));      
+   //    return days      
+   // }  
+   function formatDay(duedate: string) {
+      const dueDateMs = new Date(duedate).setHours(0, 0, 0, 0); 
+      const todayMs = new Date().setHours(0, 0, 0, 0);
+  
+      const diffInDays = Math.ceil((dueDateMs - todayMs) / (24 * 60 * 60 * 1000));
+      return diffInDays;
+   }
+
+   const showDueDate = {
+      text:'',
+      styles: {}
+   }
+   
+   if(formatDay(duedate)>1){
+      showDueDate.text = `Due: ${(formatDay(duedate))} days`;
+      showDueDate.styles = { backgroundColor: "green", color: "black" }; 
+   } else if (formatDay(duedate)===1){
+      showDueDate.text = `Due: tomorrow`;
+      showDueDate.styles = { backgroundColor: "red", color: "black" };
+   } else {
+      showDueDate.text = "Due: Now";
+      showDueDate.styles= { backgroundColor: "gray", color: "white" };
+   }
 
    function onCheckedBtn(id:string){      
       setAssignments((preAssns:TAssignment[])=>{
@@ -40,13 +63,11 @@ export function Assignment({ id, assnname,duedate, isCompleted, setAssignments, 
       </button>
 
       <p className={isCompleted? styles.textCompleted : ''}>{assnname}</p>
-
-      <div 
-         className={styles.duedate}
-         style={formatDay(duedate)>1 ? {backgroundColor:"#b3ffb3",color:"black"}:{backgroundColor:"red",color:"black"}} >
-            {formatDay(duedate)>1 ? 
-            <span>Due: {formatDay(duedate)} days</span> :
-            <span>Due: tomorrow</span>}</div>
+             
+      <div className={styles.duedate} style={showDueDate.styles}>
+        <span>{showDueDate.text}</span>
+      </div>
+      
       <button 
          className={styles.deleteButton}
          onClick={()=>{onDelete(id)}}>
