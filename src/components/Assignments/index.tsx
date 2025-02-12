@@ -1,12 +1,14 @@
-import { AssignmentProps } from "../../shared/types";
+import { TAssignment } from "../../shared/types";
 import { Assignment } from "../Assignment";
 import styles from "./assignments.module.css";
+import { useState } from "react";
 
 type AssignmentsProps = {
-   assignments: AssignmentProps[],
-   countCompleted: number
+   assignments: TAssignment[],  
 }
-export function Assignments({assignments, countCompleted}: AssignmentsProps) {
+export function Assignments({ assignments }: AssignmentsProps) {
+  const [countCompleted, setCountCompleted] = useState<number>(0)
+
   return (
     <section className={styles.assignments}>
       <header className={styles.header}>
@@ -23,20 +25,20 @@ export function Assignments({assignments, countCompleted}: AssignmentsProps) {
 
       <div className={styles.list}>
         
-    {assignments.length >0 && assignments.map((item:AssignmentProps)=>(
+    {assignments.length >0 && assignments.map((item:TAssignment)=>(
       <div key={item.id}>
          <Assignment
             id={item.id}
             assnname={item.assnname}
             duedate={item.duedate}
-            isChecked={item.isChecked}
-            onDelete={item.onDelete}
-            onCheckedBtn={item.onCheckedBtn}
+            isCompleted={item.isCompleted}          
+            setAssignments={item.setAssignments}
+            setCountCompleted={setCountCompleted}
            />
       </div>
-    ))}
+      ))}
         
-      </div>
-    </section>
+   </div>
+   </section>
   );
 }

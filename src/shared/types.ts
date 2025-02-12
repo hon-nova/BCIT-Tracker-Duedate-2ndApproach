@@ -1,8 +1,9 @@
-export type AssignmentProps = {
-   id:string|null,
+export type TAssignment = {
+   id: string,
    assnname:string|null,
-	duedate:string,
-   isChecked: boolean,
-   onDelete: (id:string)=>void,
-   onCheckedBtn: (id:string)=>void
+   duedate:string,
+   isCompleted: boolean,  
+   setAssignments: React.Dispatch<React.SetStateAction<TAssignment[] | []>>,
+   setCountCompleted: React.Dispatch<React.SetStateAction<number>>
 }
+

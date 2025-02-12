@@ -1,40 +1,76 @@
 import styles from "./header.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { uppercase } from "../../helpers/stringHelpers";
+import { useState } from 'react'
+import { TAssignment } from "../../shared/types";
 
-type HeaderProps = {
-	assnname:string|null,
-	duedate: string|null,
-   setAssnname:React.Dispatch<React.SetStateAction<string|null>>
-   setDuedate:React.Dispatch<React.SetStateAction<string|null>>
-   onAdd: (assnname:string,duedate:string)=>void
-
+type HeaderProps = {	
+   setAssignments: React.Dispatch<React.SetStateAction<TAssignment[] | []>>
 }
-export function Header({assnname, duedate,setAssnname,setDuedate, onAdd }: HeaderProps) {
+
+type HeaderObj = {
+   assnname: string,
+   duedate: string
+}
+
+export function Header({ setAssignments }: HeaderProps) {
+   const [assn, setAssn] = useState<HeaderObj>({
+      assnname:'',
+      duedate:''
+   })
+
    function isEmptyInput():boolean{
-      return (!assnname || assnname==='') || (!duedate ||duedate==='')
+      return (!assn.assnname || assn.assnname==='') || (!assn.duedate || assn.duedate==='')
    }
+
+   function handleAddClick(){
+      setAssignments((preAssignments: TAssignment[]|null)=>{
+         const newAssn: TAssignment = {
+            id: crypto.randomUUID(),
+            assnname: assn?.assnname || null,
+            duedate: assn?.duedate,
+            isCompleted: false,
+            setAssignments: setAssignments,
+            setCountCompleted: () => 0
+         }
+         return preAssignments ? [newAssn,...preAssignments ]: []
+      })
+   }
+   function handleSubmit(e:React.FormEvent<HTMLFormElement>){
+      e.preventDefault();
+      // setAssignments((preAssignments: TAssignment[]|null)=>{
+      //    const newAssn: TAssignment = {
+      //       id: crypto.randomUUID(),
+      //       assnname: assn?.assnname || null,
+      //       duedate: assn?.duedate,
+      //       isCompleted: false
+      //    }
+      //    return preAssignments ? [...preAssignments, newAssn]: []
+      // })
+      setAssn({ assnname:'', duedate:''})
+   }   
+
   return (
     <header className={styles.header}>
       {/* This is simply to show you how to use helper functions */}
       <h1>{uppercase("bcit")} Assignment Tracker</h1>
       <form 
          className={styles.newAssignmentForm}
-         onSubmit={(e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault(); setAssnname("");setDuedate("")}}>
+         onSubmit={handleSubmit}>
          <input 
             placeholder="Add a new assignment" 
             type="text"
             name="assnname"
-            value={assnname||''}
-            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setAssnname(e.target.value)} />
+            value={assn.assnname}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setAssn((preAssn: HeaderObj)=>({...preAssn, assnname: e.target.value}))} />
          <input
             type="date"
             required
             name="duedate"
-            value={duedate||''}
-            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setDuedate(e.target.value)} />
+            value={assn.duedate}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setAssn((preAssn: HeaderObj)=>({...preAssn, duedate: e.target.value}))} />
         <button
-            onClick={()=> {if(assnname && duedate) {onAdd(assnname,duedate)}}}
+            onClick={handleAddClick}
             disabled={isEmptyInput()}
             style={isEmptyInput() ? {backgroundColor:"lightgrey",cursor:"not-allowed"}:{cursor:"pointer"}}>
           Create <AiOutlinePlusCircle size={20} />
